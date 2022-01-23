@@ -2358,14 +2358,15 @@ TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/assign)
 	tTJSVariantClosure clo = param[0]->AsObjectClosureNoAddRef();
 	if(clo.Object)
 	{
-		if(TJS_FAILED(clo.Object->NativeInstanceSupport(TJS_NIS_GETINSTANCE,
 #ifdef USING_TP_STUB
-			ClassID_KAGParser, 
+		#define ParserID ClassID_KAGParser
 #else
-			tTJSNC_KAGParser::ClassID,
+		#define ParserID tTJSNC_KAGParser::ClassID
 #endif
-			(iTJSNativeInstance**)&src)))
+		if(TJS_FAILED(clo.Object->NativeInstanceSupport(TJS_NIS_GETINSTANCE, ParserID, (iTJSNativeInstance**)&src)))
 			TVPThrowExceptionMessage(TVPKAGSpecifyKAGParser);
+
+#undef ParserID
 	}
 	else
 	{
